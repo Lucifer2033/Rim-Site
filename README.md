@@ -1,4 +1,4 @@
 # Rim-Site
-Авто Донат для игровых серверов MineCraft
+Авто Донат для игровых серверов MineCraft<br>
 #v1
-![image](https://user-images.githubusercontent.com/68010312/206884485-08c4f21b-73bc-4473-a304-cb872f71bdb3.png)
+![image](https://user-images.githubusercontent.com/68010312/206884504-10fcf755-847c-4ccf-9638-968edc4b8af9.png)
