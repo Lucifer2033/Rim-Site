@@ -1,0 +1,9 @@
+RewriteEngine On
+ErrorDocument 404 /404.php
+ErrorDocument 403 /403.php
+
+RewriteBase /
+RewriteCond %{HTTP_HOST} ^www.rimworlda.ru
+RewriteRule ^subdir/(.*)$ https://www.rimworlda.ru/$1 [L,R=301]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f

@@ -1,0 +1,181 @@
+#before-load {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: grey;
+    z-index: 1001;
+}
+#before-load i {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background: url('/style/img/load.gif') no-repeat 50% 50%;
+    margin: -35px 0 0 -35px;
+}
+
+.payments {
+    padding-top: 0px;
+}
+.payments > .blockname {
+    font-size: 24px;
+    font-weight: bold;
+    color: #757575;
+    padding-bottom: 20px;
+}
+.payments > .payment-list > .payment-id {
+    display: none;
+    position: relative;
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+}
+.window {
+    display: block;
+    box-shadow: rgb(0 0 0 / 12%) 0 1px 6px, rgb(0 0 0 / 12%) 0 1px 4px;
+    border-radius: 4px;
+    background-color: #fff;
+    padding: 20px;
+}
+.payments > .payment-list > .payment-id > .image {
+    display: block;
+    height: 120px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.payments > .payment-list > .payment-id > .title {
+    font-weight: bold;
+    color: #757575;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.payments > .payment-list > .payment-id > .player {
+    font-weight: bold;
+    color: #9E9E9E;
+    font-size: 12px;
+}
+
+@media (max-width: 991px){
+.payments > .payment-list {
+    grid-template-columns: repeat(3, calc((100% / 3) - (20px * 2 / 3)));
+}
+}
+@media (max-width: 1199px){
+.payments > .payment-list {
+    grid-template-columns: repeat(4, calc(25% - (20px * 3 / 4)));
+}
+}
+.payments > .payment-list {
+    display: flex;
+    grid-gap: 20px;
+    grid-template-columns: repeat(5, calc(20% - 16px));
+    flex-wrap: wrap;
+}
+
+body {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: #edeef0;
+	background-image:url('/style/img/background.png');
+}
+.btn-gold {
+    color: white;
+    background-color: gold;
+}
+.btn-turquoise {
+    color: white;
+    background-color: turquoise;
+}
+.btn-darkviolet {
+    color: white;
+    background-color: darkviolet;
+}
+.btn-deepskyblue {
+    color: white;
+    background-color: deepskyblue;
+}
+.btn-magenta {
+    color: white;
+    background-color: magenta;
+}
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both
+}
+.animated.infinite {
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite
+}
+.animated.hinge {
+    -webkit-animation-duration: 2s;
+    animation-duration: 2s
+}
+@keyframes pulse {
+    from {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+    50% {
+        -webkit-transform: scale3d(1.05, 1.05, 1.05);
+        transform: scale3d(1.05, 1.05, 1.05);
+    }
+    to {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}
+.pulse {
+    -webkit-animation-name: pulse;
+    animation-name: pulse
+}
+@keyframes flash {
+    from, 50%, to {
+        opacity: 1;
+    }
+    40% {
+        opacity: 0;
+    }
+}
+.flash {
+    animation-name: flash
+}
+.animated.flipOutX,
+.animated.flipOutY,
+.animated.bounceIn,
+.animated.bounceOut {
+    animation-duration: .75s
+}
+@keyframes bounceIn {
+    from, 20%, 40%, 60%, 80%, to {
+        animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    }
+    0% {
+        opacity: 0;
+        transform: scale3d(.3, .3, .3);
+    }
+    20% {
+        transform: scale3d(1.1, 1.1, 1.1);
+    }
+    40% {
+        transform: scale3d(.9, .9, .9);
+    }
+    60% {
+        opacity: 1;
+        transform: scale3d(1.03, 1.03, 1.03);
+    }
+    80% {
+        transform: scale3d(.97, .97, .97);
+    }
+    to {
+        opacity: 1;
+        transform: scale3d(1, 1, 1);
+    }
+}

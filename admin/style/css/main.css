@@ -1,0 +1,154 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+html {
+    position: relative;
+    height: auto !important;
+    min-height: 100% !important;
+}
+
+body {
+    position: static;
+    background: #EAEAEA url(../img/bg.png) fixed;
+    background-size: cover;
+}
+
+footer {
+    position: absolute !important;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: block;
+    background: rgba(0, 0, 0, .5);
+    padding: 10px 0 10px 0;
+    color: #FAFAFA;
+    overflow: visible;
+}
+
+.page {
+    margin-bottom: 3rem;
+}
+
+@media (max-width: 991px) {
+    footer * {
+        text-align: center !important;
+    }
+
+    .page {
+        margin-bottom: 10rem;
+    }
+}
+
+.buy-form {
+    width: 40%;
+
+}
+
+nav {
+    margin-bottom: 10% !important;
+}
+
+.btn {
+    border-radius: 0;
+}
+
+label {
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+.btn {
+    outline: none !important;
+}
+
+footer a {
+    color: #FAFAFA;
+    text-decoration: none;
+    border-bottom: 1px dotted rgba(245, 245, 245, 0.58);
+    margin-right: 10px;
+}
+
+footer a:last-of-type {
+    margin-right: 0;
+}
+
+footer a:hover, footer a:focus {
+    color: #FAFAFA;
+    text-decoration: none;
+}
+
+.server-select {
+    display: none;
+}
+
+.server {
+    display: none;
+}
+
+select {
+    width: 100%;
+}
+
+.jq-selectbox {
+    width: 100%;
+    display: block;
+}
+
+.jq-selectbox__dropdown ul {
+    max-height: 203px;
+}
+
+noscript .alert {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999999;
+    border-radius: 0;
+    height: 95%;
+}
+
+#monit .dropdown-menu form {
+    padding: 10px;
+    min-width: 200px;
+}
+
+#monit .serv {
+    border-bottom: 1px dashed #C3C3C3;
+    margin-bottom: 5px;
+}
+
+#monit .serv .online {
+    float: right;
+}
+
+.buy:first-of-type {
+    padding-right: 0;
+}
+
+.buy:last-of-type {
+    padding-left: 0;
+}
+
+textarea {
+    resize: vertical !important;
+}
+
+.form-group textarea {
+    resize: vertical !important;
+}
+
+.server-select button .progress {
+    left: 1.5rem;
+    position: absolute;
+    height: 6px;
+    width: calc(100% - 30px);
+}
