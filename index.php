@@ -174,8 +174,8 @@ echo "$lists";
     ?>
     <?php
     require_once($_SERVER["DOCUMENT_ROOT"]."/engine/mysql.php");
-    $select = $mysqli->query("SELECT * FROM `RD-RCONDATA`;");
-    $selectcount = $mysqli->query("SELECT COUNT(*) FROM `RD-RCONDATA`;");
+    $select = $mysqli->query("SELECT * FROM `RD-RCONDATA` WHERE `status` = 1;");
+    $selectcount = $mysqli->query("SELECT COUNT(*) FROM `RD-RCONDATA` WHERE `status` = 1;");
     $count = $selectcount->fetch_assoc();
     $row = $select->fetch_assoc();
     $idses = (string)$row['id'];
