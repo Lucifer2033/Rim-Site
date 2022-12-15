@@ -23,6 +23,7 @@ $servadm_one = '
 <th>Ркон порт</th>
 <th>Пароль</th>
 <th>Название</th>
+<th>Статус</th>
 <th>Действие</th>
 </thead>
 <tbody>
@@ -94,6 +95,13 @@ $servadm_one_add = '
 <div class="form-group label-floating">
 <label for="servname" class="control-label">Название</label>
 <input type="text" id="servname" name="servname" class="form-control" value="" required>
+</div>
+<div class="form-group label-floating">
+<label for="status" class="control-label">Вкл сервер для покупки</label>
+<select id="status" name="status" class="selectpicker" data-style="select-with-transition" title="Вкл сервер для покупки"  required>
+<option value="0">Нет</option>
+<option value="1">Да</option>
+</select>
 </div>
 <button class="btn btn-block btn-danger"><i class="material-icons">save</i> Сохранить</button>
 </div>

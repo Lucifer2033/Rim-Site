@@ -55,7 +55,8 @@ switch ($modeadm) {
     $rconportserver = $_POST['servrconport'];
     $passwordserver = $_POST['servpassword'];
     $nameserver = $_POST['servname'];
-	$mysqli->query("INSERT INTO `RD-RCONDATA` (`id`, `ip`, `port`, `rconport`, `password`, `server`, `test`) VALUES (NULL, '$ipserver', $portserver, $rconportserver, '$passwordserver', '$nameserver', 1);");
+	$statusserver = $_POST['status'];
+	$mysqli->query("INSERT INTO `RD-RCONDATA` (`id`, `ip`, `port`, `rconport`, `password`, `server`, `status`) VALUES (NULL, '$ipserver', $portserver, $rconportserver, '$passwordserver', '$nameserver', $statusserver);");
 	break;
 	case 'rcon_edit':
 	$ids = $_POST['idse'];
@@ -64,7 +65,8 @@ switch ($modeadm) {
     $rconportserver = $_POST['servrconport'];
     $passwordserver = $_POST['servpassword'];
     $nameserver = $_POST['servname'];
-	$mysqli->query("UPDATE `RD-RCONDATA` SET `ip` = '$ipserver', `port` = $portserver, `rconport` = $rconportserver, `password` = '$passwordserver', `server` = '$nameserver' WHERE `id` = $ids;");
+	$statusserver = $_POST['status'];
+	$mysqli->query("UPDATE `RD-RCONDATA` SET `ip` = '$ipserver', `port` = $portserver, `rconport` = $rconportserver, `password` = '$passwordserver', `server` = '$nameserver', `status` = $statusserver WHERE `id` = $ids;");
 	break;
 	case 'goods_add':
 	$titledonate = $_POST['name'];
@@ -90,7 +92,6 @@ switch ($modeadm) {
 	$cmdsborka = preg_replace('/"/i', '&quot;', $cmdsborka);
 	$serverarrays = mb_substr($serverarrays, 0, -2);
 	if(!$serversdonate[1]){$serverarrays = $serversdonate[0];}
-	//var_dump($_POST);
 	$mysqli->query("INSERT INTO `RD-DONAT` (`id`, `title`, `price`, `command`, `doplata`, `pos`, `category`, `server`, `lockup`, `amount`) VALUES (NULL, '$titledonate', $pricedonate, '$cmdsborka', $doplatadonate, $posdonate, '$categorydonate', '$serverarrays', $lockdonate, '$amountse');");
 	break;
 	case 'goods_edit':
@@ -486,7 +487,7 @@ switch ($_REQUEST["mode"]) {
 		break;
 		default:
 		echo "$silkaadmone";
-		echo "$silkaadmlist";
+		echo $items['silkaadmlist'];
 		echo "$silkaadmtwo";
 		break;
 	}
@@ -520,7 +521,7 @@ switch ($_REQUEST["mode"]) {
 		break;
 		default:
 		echo "$useradmone";
-		echo "$listadmuser";
+		echo $items['listadmuser'];
 		echo "$useradmtwo";
 		break;
 	}
@@ -554,7 +555,7 @@ switch ($_REQUEST["mode"]) {
 			break;
 		default:
 		echo "$servadm_one";
-		echo "$listadmserver";
+		echo $items['listadmserver'];
 		echo "$servadm_two";
 		break;
 		}
@@ -588,7 +589,7 @@ switch ($_REQUEST["mode"]) {
 			break;
 		default:
 			echo "$cateadm_one";
-			echo "$listadmcate";
+			echo $items['listadmcate'];
 			echo "$cateadm_two";
 		break;
 		}
@@ -623,7 +624,7 @@ switch ($_REQUEST["mode"]) {
 			
 			default:
 			echo "$cupadm_one";
-			echo "$listadmcup";
+			echo $items['listadmcup'];
 			echo "$cupadm_two";
 			break;
 		}
@@ -634,9 +635,9 @@ switch ($_REQUEST["mode"]) {
 	switch ($doadm) {
 	case 'add':
 	echo "$donadm_one_add";
-	echo "$listcategory";
+	echo $items['listcategory'];
 	echo "$donadm_two_add";
-	echo "$serveradmdonlist";
+	echo $items['serveradmdonlist'];
 	echo "$donadm_three_add";
 	break;
 	case 'edit':
@@ -682,7 +683,7 @@ switch ($_REQUEST["mode"]) {
 	
 	default:
 		echo "$donadm_one";
-		echo "$listadmdonate";
+		echo $items['listadmdonate'];
 		echo "$donadm_two";
 	break;
 	}

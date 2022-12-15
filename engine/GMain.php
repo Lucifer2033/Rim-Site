@@ -1,32 +1,15 @@
-<?php 
-
+<?php
 require_once('mysql.php');
 require_once('Rcon.php');
 require_once('config.php');
 $tovars = "";
 $items = array();
 $itemsamdcate = array();
-$forms = "";
-$knopki = "";
-$lastdonat = "";
-$listcategory = "";
-$listadmcate = "";
-$serveradmdonlist = "";
-$listadmdonate = "";
-$listadmcup = "";
-$listadmserver = "";
-$listadmuser = "";
-$silkaadmlist = "";
-$silkisheader = "";
-$silkisfooter = "";
-$URLSITES = URLSITE;
-$tester = "";
 $admlistchesk = array();
+$URLSITES = URLSITE;
 $select = $mysqli->query("SELECT * FROM `RD-RCONDATA`;");
 $usersadmins = $mysqli->query("SELECT * FROM `RD-ADMIN`;");
 $silki = $mysqli->query("SELECT * FROM `RD-SILKA` ORDER BY `RD-SILKA`.`pos` ASC;");
-$skikiforms = $mysqli->query("SELECT * FROM `RD-SILKA`;");
-$pagesforms = $mysqli->query("SELECT * FROM `RD-PAGES`;");
 $pages = $mysqli->query("SELECT * FROM `RD-PAGES`;");
 $lastdonatresulte = $mysqli->query("SELECT * FROM `RD-PAYMENT` WHERE `give` = 1 ORDER BY `id` DESC LIMIT 6;");
 $rddonresulte = $mysqli->query("SELECT * FROM `RD-DONAT` ORDER BY `RD-DONAT`.`pos` ASC;");
@@ -58,16 +41,14 @@ while($row = $rddonresulte->fetch_assoc())
 }
 while ($result = mysqli_fetch_assoc($select)) {
     $wserver = (string)$result['server'];
-    $serversresulte = $mysqli->query("SELECT * FROM `RD-RCONDATA` WHERE `server` = '$wserver';");
+    $serversresulte = $mysqli->query("SELECT * FROM `RD-RCONDATA` WHERE `server` = '$wserver' AND `status` = 1;");
     $rdcateresulte = $mysqli->query("SELECT * FROM `RD-CATEGORY` ORDER BY `RD-CATEGORY`.`pos` ASC;");
-
     while($row = $rdcateresulte->fetch_assoc())
     {
         $id = (string)$row['id'];
         $title = (string)$row['title'];
         $pos = (string)$row['pos'];
         $npos = (int)$row['pos'];
-        $server = (string)$row['server'];
         $itemsamdcate["cate_edit=$id=form"] = '
         <form action="'.$URLSITES.'admin/cpanel.php?mode=category" id="category" class="card" method="POST" data-toggle="validator" novalidate="true">
         <div class="card-content">
@@ -88,7 +69,7 @@ while ($result = mysqli_fetch_assoc($select)) {
         ';
         if(!isset($admlistchesk["categoryadminslist=$title&id=$id"])){
         $admlistchesk["categoryadminslist=$title&id=$id"] = 'CHECK';
-        $listadmcate .= "
+        $items['listadmcate'] .= "
         <tr>
         <td>$id</td>
         <td>$title</td>
@@ -106,7 +87,7 @@ while ($result = mysqli_fetch_assoc($select)) {
         $tovars .= "<optgroup label='$title'>$cod</optgroup>";
         if(!isset($admlistchesk["categoryadminslists=$title&id=$id"])){
         $admlistchesk["categoryadminslists=$title&id=$id"] = 'CHECK';
-        $listcategory .= "\n<option value='$title'>$title</option>";
+        $items['listcategory'] .= "\n<option value='$title'>$title</option>";
         }
     
     }
@@ -114,8 +95,8 @@ while ($result = mysqli_fetch_assoc($select)) {
     {
     $id = (string)$row['id'];
     $servers = (string)$row['server'];
-    $dons = (string)$items["fullcodeserver=$wserver"];
-    $serveradmdonlist .= '
+    $dons = (string)$items["fullcodeserver=$servers"];
+    $items['serveradmdonlist'] .= '
     <option value='.$servers.'>'.$servers.'</option>
     ';
     $items['oldknopki'] .= '
@@ -261,48 +242,55 @@ $itemsamdcate["pages_index_model"] .= '
 </div>
 ';
 }
-}
-while ($row = $pagesforms->fetch_assoc()) {
-$ids = (string)$row['id'];
-$pageidname = (string)$row['idname'];
-$pagenames = (string)$row['name'];
-$pagetext = (string)$row['text'];
 if(!isset($admlistchesk["pagesadminsforms=$pageidname&id=$ids"])){
-$admlistchesk["pagesadminsforms=$pageidname&id=$ids"] = 'CHECK';
-$itemsamdcate["pages_edit=$ids=form"] = '
-<form action="'.$URLSITES.'admin/cpanel.php?mode=pages" id="pages" class="card" method="POST" data-toggle="validator">
-<div class="card-content">
-<form method="post">
-<div class="form-group label-floating">
-<input name="idse" type="hidden" value='.$ids.'>
-<input name="mode" type="hidden" value=pages>
-<input name="modeapi" type="hidden" value=pages_edit>
-<label for="name" class="control-label">Идентификатор страницы</label>
-<input type="text" id="name" name="name" class="form-control" value="'.$pageidname.'" required>
-</div>
-<div class="form-group label-floating">
-<label for="title" class="control-label">Название</label>
-<input type="text" id="title" name="title" class="form-control" value="'.$pagenames.'" required>
-</div>
-<div class="form-group label-floating">
-<textarea id="editoradverts_text_1" name="editoradverts_text_1" class="form-control" required placeholder="Загрузка редактора...">
-'.$pagetext.'
-</textarea>
-</div>
-<button type="submit" class="btn btn-block btn-danger"><i class="material-icons">save</i> Сохранить</button>
-</form>
-</div>
-</form>
-';
+    $admlistchesk["pagesadminsforms=$pageidname&id=$ids"] = 'CHECK';
+    $itemsamdcate["pages_edit=$ids=form"] = '
+    <form action="'.$URLSITES.'admin/cpanel.php?mode=pages" id="pages" class="card" method="POST" data-toggle="validator">
+    <div class="card-content">
+    <form method="post">
+    <div class="form-group label-floating">
+    <input name="idse" type="hidden" value='.$ids.'>
+    <input name="mode" type="hidden" value=pages>
+    <input name="modeapi" type="hidden" value=pages_edit>
+    <label for="name" class="control-label">Идентификатор страницы</label>
+    <input type="text" id="name" name="name" class="form-control" value="'.$pageidname.'" required>
+    </div>
+    <div class="form-group label-floating">
+    <label for="title" class="control-label">Название</label>
+    <input type="text" id="title" name="title" class="form-control" value="'.$pagenames.'" required>
+    </div>
+    <div class="form-group label-floating">
+    <textarea id="editoradverts_text_1" name="editoradverts_text_1" class="form-control" required placeholder="Загрузка редактора...">
+    '.$pagetext.'
+    </textarea>
+    </div>
+    <button type="submit" class="btn btn-block btn-danger"><i class="material-icons">save</i> Сохранить</button>
+    </form>
+    </div>
+    </form>
+    ';
+    }
 }
-}
-while ($row = $skikiforms->fetch_assoc()) {
+while ($row = $silki->fetch_assoc()) {
 $ids = (string)$row['id'];
 $silka = (string)$row['silka'];
 $sheader = (string)$row['header'];
 $sfooter = (string)$row['footer'];
 $sname = (string)$row['name'];
 $spos = (string)$row['pos'];
+$items['silkaadmlist'] .= "
+<tr>
+<td>$sname</td>
+<td>$silka</td>
+<td>$sheader</td>
+<td>$sfooter</td>
+<td>$spos</td>
+<td class='td-actions'>
+<a href='?mode=links&do=edit&id=$ids' rel='tooltip' class='btn btn-info btn-simple' data-original-title='Редактировать'><i class='material-icons'>edit</i></a>
+<a href='?mode=links&do=delete&id=$ids' rel='tooltip' class='btn btn-danger btn-simple' data-original-title='Удалить'><i class='material-icons'>close</i></a>
+</td>
+</tr>
+";
 $itemsamdcate["links_edit=$ids=chapter_1=form"] = '';
 $itemsamdcate["links_edit=$ids=chapter_2=form"] = '';
 $itemsamdcate["links_edit=$ids=chapter_3=form"] = '';
@@ -352,6 +340,8 @@ switch ($sheader) {
     case '1':
     $reparray = str_replace('<option value="1">Да</option>','<option value="1" selected>Да</option>',$itemsamdcate["links_edit=$ids=chapter_1=head"]);
     $itemsamdcate["links_edit=$ids=chapter_1=head"] = $reparray;
+    $items['oldsilkisheader'] .= '<ul class="nav navbar-nav"><li><a href="'.$silka.'">'.$sname.'</a></li></ul>';
+    $items['newsilkisheader'] .= '<li class="nav-item"><a class="nav-link" href="'.$silka.'">'.$sname.'</a></li>';
     break;
 }
 switch ($sfooter) {
@@ -362,35 +352,8 @@ switch ($sfooter) {
     case '1':
     $replockarray = str_replace('<option value="1">Да</option>','<option value="1" selected>Да</option>',$itemsamdcate["links_edit=$ids=chapter_2=footer"]);
     $itemsamdcate["links_edit=$ids=chapter_2=footer"] = $replockarray;
+    $items['silkisfooter'] .= '<a href="'.$silka.'"> '.$sname.' </a>';
     break;
-}
-}
-while ($row = $silki->fetch_assoc()) {
-$ids = (string)$row['id'];
-$silka = (string)$row['silka'];
-$sheader = (string)$row['header'];
-$sfooter = (string)$row['footer'];
-$sname = (string)$row['name'];
-$spos = (string)$row['pos'];
-$silkaadmlist .= "
-<tr>
-<td>$sname</td>
-<td>$silka</td>
-<td>$sheader</td>
-<td>$sfooter</td>
-<td>$spos</td>
-<td class='td-actions'>
-<a href='?mode=links&do=edit&id=$ids' rel='tooltip' class='btn btn-info btn-simple' data-original-title='Редактировать'><i class='material-icons'>edit</i></a>
-<a href='?mode=links&do=delete&id=$ids' rel='tooltip' class='btn btn-danger btn-simple' data-original-title='Удалить'><i class='material-icons'>close</i></a>
-</td>
-</tr>
-";
-if($sheader == 1){
-$items['oldsilkisheader'] .= '<ul class="nav navbar-nav"><li><a href="'.$silka.'">'.$sname.'</a></li></ul>';
-$items['newsilkisheader'] .= '<li class="nav-item"><a class="nav-link" href="'.$silka.'">'.$sname.'</a></li>';
-}
-if($sfooter == 1){
-$items['silkisfooter'] .= '<a href="'.$silka.'"> '.$sname.' </a>';
 }
 }
 $selectserver = $mysqli->query("SELECT * FROM `RD-RCONDATA`;");
@@ -401,6 +364,7 @@ while ($rowservs = $selectserver->fetch_assoc()) {
     $servrrconport = (string)$rowservs['rconport'];
     $servrpass = (string)$rowservs['password'];
     $servr = (string)$rowservs['server'];
+    $servstats = (string)$rowservs['status'];
     $itemsamdcate["rcondata_$servid=formedit"] = '';
     $itemsamdcate["rcondata_$servid=formedit"] .=
     '
@@ -429,11 +393,27 @@ while ($rowservs = $selectserver->fetch_assoc()) {
     <label for="servname" class="control-label">Название</label>
     <input type="text" id="servname" name="servname" class="form-control" value="'.$servr.'" required>
     </div>
+    <div class="form-group label-floating">
+    <label for="status" class="control-label">Вкл сервер для покупки</label>
+    <select id="status" name="status" class="selectpicker" data-style="select-with-transition" title="Вкл сервер для покупки"  required>
+    <option value="0">Нет</option>
+    <option value="1">Да</option>
+    </select>
     <button class="btn btn-block btn-danger"><i class="material-icons">save</i> Сохранить</button>
     </div>
     </form>
     ';
-    $listadmserver .= "
+    switch ($servstats) {
+        case '0':
+        $reparray = str_replace('<option value="0">Нет</option>','<option value="0" selected>Нет</option>',$itemsamdcate["rcondata_$servid=formedit"]);
+        $itemsamdcate["rcondata_$servid=formedit"] = $reparray;
+        break;
+        case '1':
+        $reparray = str_replace('<option value="1">Да</option>','<option value="1" selected>Да</option>',$itemsamdcate["rcondata_$servid=formedit"]);
+        $itemsamdcate["rcondata_$servid=formedit"] = $reparray;
+        break;
+    }
+    $items['listadmserver'] .= "
     <tr>
     <td>$servid</td>
     <td>$servrip</td>
@@ -441,6 +421,7 @@ while ($rowservs = $selectserver->fetch_assoc()) {
     <td>$servrrconport</td>
     <td>$servrpass</td>
     <td>$servr</td>
+    <td>$servstats</td>
     <td class='td-actions'>
     <a href='?mode=rcon&do=edit&id=$servid' rel='tooltip' class='btn btn-info btn-simple' data-original-title='Редактировать'><i class='material-icons'>edit</i></a>
     <a href='?mode=rcon&do=delete&id=$servid' rel='tooltip' class='btn btn-danger btn-simple' data-original-title='Удалить'><i class='material-icons'>close</i></a>
@@ -648,7 +629,7 @@ for ($ids=0; $ids < count($cmd); $ids++) {
         ';
         if(!isset($admlistchesk["donateadminslist=$title&id=$id"])){
         $admlistchesk["donateadminslist=$title&id=$id"] = 'CHECK';
-        $listadmdonate .= "
+        $items['listadmdonate'] .= "
         <tr>
         <td>$id</td>
         <td>$title</td>
@@ -756,7 +737,7 @@ while($row = $promocodes->fetch_assoc())
 ';
 if(!isset($admlistchesk["cupadminslist=$name&id=$id"])){
     $admlistchesk["cupadminslist=$name&id=$id"] = 'CHECK';
-    $listadmcup .= "
+    $items['listadmcup'] .= "
     <tr>
     <td>$name</td>
     <td>$percent%</td>
@@ -796,15 +777,15 @@ while ($row = $usersadmins->fetch_assoc()) {
     </div>
     </form>
     ';
-$listadmuser .= '
-<tr>
-<td>'.$login.'</td>
-<td>'.$ip.'</td>
-<td class="td-actions">
-<a href="?mode=users&amp;do=edit&amp;id='.$id.'" rel="tooltip" title="" class="btn btn-info btn-simple" data-original-title="Редактировать"><i class="material-icons">edit</i></a>
-<a href="?mode=users&amp;do=delete&amp;id='.$id.'" rel="tooltip" title="" class="btn btn-danger btn-simple" data-original-title="Удалить"><i class="material-icons">close</i></a>
-</td>
-</tr>';
+    $items['listadmuser'] .= '
+    <tr>
+    <td>'.$login.'</td>
+    <td>'.$ip.'</td>
+    <td class="td-actions">
+    <a href="?mode=users&amp;do=edit&amp;id='.$id.'" rel="tooltip" title="" class="btn btn-info btn-simple" data-original-title="Редактировать"><i class="material-icons">edit</i></a>
+    <a href="?mode=users&amp;do=delete&amp;id='.$id.'" rel="tooltip" title="" class="btn btn-danger btn-simple" data-original-title="Удалить"><i class="material-icons">close</i></a>
+    </td>
+    </tr>';
 }
 function debug_to_console($data) {
     $output = $data;
@@ -813,14 +794,6 @@ function debug_to_console($data) {
 
     echo "$output";
 }
-        /*
-        $items = array();
-        $items['test'] = array(
-        "cat" => '',
-        "cod" => '1'
-        );
-        printf("%s\n",json_encode($items['test']['cat'] = 1)); 
-        */
         function vk_msg_send($peer_id,$text,$token){
             $request_params = array(
                 'message' => $text, 
@@ -884,24 +857,4 @@ function debug_to_console($data) {
                 sleep($seconds);
             }
         }
-/**
-<tr>
-<td>1</td>
-<td>Донат группы</td>
-<td>0</td>
-<td class="td-actions">
-<a href="?mode=category&do=edit&id=1" rel="tooltip" class="btn btn-info btn-simple" data-original-title="Редактировать"><i class="material-icons">edit</i></a>
-<a href="?mode=category&do=delete&id=1" rel="tooltip" class="btn btn-danger btn-simple" data-original-title="Удалить"><i class="material-icons">close</i></a>
-</td>
-</tr><tr>
-
-style="
-margin-top: 2px;
-margin-right: 2px;
-background-color: #5b91ce; 
-border-radius: 24px;"
-
-        setInterval(function(){
-        }, 100000);
-**/
 ?>

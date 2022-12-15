@@ -156,7 +156,7 @@ CREATE TABLE `RD-RCONDATA` (
   `rconport` int(255) NOT NULL DEFAULT '25575',
   `password` varchar(255) NOT NULL DEFAULT 'me Site by vk.com/lucifer2033',
   `server` varchar(255) NOT NULL DEFAULT 'Site by vk.com/lucifer2033',
-  `test` int(255) NOT NULL
+  `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
