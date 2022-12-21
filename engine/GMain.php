@@ -106,7 +106,7 @@ while ($result = mysqli_fetch_assoc($select)) {
     ';
     $items['newknopki'] .= '
     <li class="nav-item">
-    <a class="nav-link " onclick="SelectServer("server'.$id.'");">'.$servers.'</a>
+    <a class="nav-link " onclick="SelectServer('.$id.')">'.$servers.'</a>
     </li>';
     $items['oldform'] .= '
     <form action="select.php" method="POST" id="server'.$id.'" name="server'.$id.'" class="server" data-toggle="validator" data-delay="200" autocomplete="off">
@@ -143,6 +143,9 @@ while ($result = mysqli_fetch_assoc($select)) {
     <option value="3">
     AnyPay
     </option>
+    <option value="4">
+    PayOk
+    </option>
     <option value="5">
     EnotIo
     </option>
@@ -164,13 +167,13 @@ while ($result = mysqli_fetch_assoc($select)) {
     </form>
     ';
     $items['newform'] .= '
-    <div class="tab-pane fade in show" id="server1">
+    <div class="tab-pane fade in show" id="server'.$id.'">
     <div class="alert alert-info text-center">
     Вы выбрали сервер: <b>'.$servers.'</b>
     </div>
     <form action="select.php"  method="POST" id="server'.$id.'" name="server'.$id.'" class="server" novalidate>
-    <input name="idserver" type="hidden" value='.$id.'>
-    <input name="nameservers" type="hidden" value='.$servers.'>
+    <input name="idserver" type="hidden" value="'.$id.'">
+    <input name="nameservers" type="hidden" value="'.$servers.'">
     <fieldset>
     <div class="form-group">
     <label>Никнейм игрока</label>
@@ -194,6 +197,9 @@ while ($result = mysqli_fetch_assoc($select)) {
     </option>
     <option value="3">
     AnyPay
+    </option>
+    <option value="4">
+    PayOk
     </option>
     <option value="5">
     EnotIo

@@ -39,7 +39,7 @@ $kassanames = array(
 1 => 'FreeKassa',
 2 => 'QIWI',
 3 => 'AnyPay',
-4 => 'FowPay',
+4 => 'PayOk',
 5 => 'EnotIo'
 );
 $paramsarray = array(//получаю параметры заножу их в массив после шифруем 
@@ -55,6 +55,7 @@ $rdpromocodes['name']//7 какой промокод был взять
 $timedays = date('d.m.Y H:i:s');
 $paramshash = base64_encode(implode(';', $paramsarray));//шифрую параметры в base64
 switch($kassa){
+	//Касса FreeKassa
 	case '1':
 	$project_id = FPROCID;
 	$amount = $pricedop;
@@ -78,25 +79,20 @@ switch($kassa){
 	$desc
 	);
 	$dwosign = md5(implode(':', $dwo_sign));//создание сигны для бд 
-	//фейк шифр для тех кто в ссылке решил вытащить параметры
-	$fakaes =  "RwHasH;2033;_Lucifer_;rimworlda.ru;$paramshash;$sign;FREEKASSA;RW;HASH;HACKER;SOSUN";
-	$twostepfakehash = hash('sha256', $fakaes);
 	$titledonates = (string)$rdonsres['title'];
 	$categorysdonates = (string)$rdonsres['category'];
 	$nameservers = (string)$rdonsres['server'];
 	//создаем в бд запись туда сигну и за шифрованные параметры base64
-	$mysqli->query("INSERT INTO `RD-ODERS` (`id`, `name`, `base64`, `sha256`) VALUES (NULL, '$dwosign', '$paramshash', '$twostepfakehash');");
+	$mysqli->query("INSERT INTO `RD-ODERS` (`id`, `name`, `base64`, `sha256`) VALUES (NULL, '$dwosign', '$paramshash', 'ХЕХЕХЕ');");
 	$mysqli->query("INSERT INTO `RD-PAYMENT` (`id`, `nick`, `data`, `namedonat`, `category`, `price`, `server`, `give`, `base64`) VALUES (NULL, '$user_id', '$timedays', '$titledonates', '$categorysdonates', $pricedop, '$nameservers', 0, '$paramshash');");
-	$url = "https://pay.freekassa.ru/?m=$project_id&oa=$amount&currency=$currency&o=$desc&s=$sign&us_field1=$twostepfakehash";
+	$url = "https://pay.freekassa.ru/?m=$project_id&oa=$amount&currency=$currency&o=$desc&s=$sign";
 	header("Location: ".$url);
 	break;
+	//Касса QIWI
 	case '2':
 	require_once($_SERVER['DOCUMENT_ROOT'].'/payment/vendor/autoload.php');
 	$billPayments = new Qiwi\Api\BillPayments(QSTOKEN);
 	$billId = $billPayments->generateId();
-	//фейк шифр для тех кто в ссылке решил вытащить параметры
-	$fakaes =  "RwHasH;2033;_Lucifer_;rimworlda.ru;$paramshash;$billId;QIWI;RW;HASH;HACKER;SOSUN";
-	$twostepfakehash = hash('sha256', $fakaes);
 	$params = [
 	'publicKey' => QTOKEN,
 	'amount' => $pricedop,
@@ -107,11 +103,12 @@ switch($kassa){
 	$categorysdonates = (string)$rdonsres['category'];
 	$nameservers = (string)$rdonsres['server'];
 	//создаем в бд запись туда сигну и за шифрованные параметры base64
-	$mysqli->query("INSERT INTO `RD-ODERS` (`id`, `name`, `base64`, `sha256`) VALUES (NULL, '$billId', '$paramshash', '$twostepfakehash');");
+	$mysqli->query("INSERT INTO `RD-ODERS` (`id`, `name`, `base64`, `sha256`) VALUES (NULL, '$billId', '$paramshash', 'ХЕХЕХЕ');");
 	$mysqli->query("INSERT INTO `RD-PAYMENT` (`id`, `nick`, `data`, `namedonat`, `category`, `price`, `server`, `give`, `base64`) VALUES (NULL, '$user_id', '$timedays', '$titledonates', '$categorysdonates', $pricedop, '$nameservers', 0, '$paramshash');");
 	$link = $billPayments->createPaymentForm($params);
 	header("Location: ".$link);
 	break;
+	//Касса ANYPAY
 	case '3':
 	$shop_id = ANYID;
 	$pay_id = rand(1, 999999);
@@ -119,48 +116,48 @@ switch($kassa){
 	$desc = 'Покупка';
 	$secret_key = ANYSECRECT;
 	$sign = md5('RUB:'.$pricedop.':'.$secret_key.':'.$shop_id.':'.$pay_id.'');
-	$fakaes =  "RwHasH;2033;_Lucifer_;rimworlda.ru;$paramshash;$sign;ANYPAY;RW;HASH;HACKER;SOSUN";
-	$twostepfakehash = hash('sha256', $fakaes);
 	$titledonates = (string)$rdonsres['title'];
 	$categorysdonates = (string)$rdonsres['category'];
 	$nameservers = (string)$rdonsres['server'];
-	$mysqli->query("INSERT INTO `RD-ODERS` (`id`, `name`, `base64`, `sha256`) VALUES (NULL, '$sign', '$paramshash', '$twostepfakehash');");
+	$mysqli->query("INSERT INTO `RD-ODERS` (`id`, `name`, `base64`, `sha256`) VALUES (NULL, '$sign', '$paramshash', 'ХЕХЕХЕ');");
 	$mysqli->query("INSERT INTO `RD-PAYMENT` (`id`, `nick`, `data`, `namedonat`, `category`, `price`, `server`, `give`, `base64`) VALUES (NULL, '$user_id', '$timedays', '$titledonates', '$categorysdonates', $pricedop, '$nameservers', 0, '$paramshash');");
-	$url = "https://anypay.io/merchant?merchant_id=$shop_id&amount=$amount&pay_id=$pay_id&desc=$desc&field1=$twostepfakehash&sign=$sign";
+	$url = "https://anypay.io/merchant?merchant_id=$shop_id&amount=$amount&pay_id=$pay_id&desc=$desc&sign=$sign";
 	header("Location: ".$url);
 	break;
+	//Касса PAYOK
 	case '4':
-	$shop_id = FOWID;
-	$secret = FOWSECRET;
+	$shop_id = PAYOKID;
+	$secret = PAYOKSECRET;
 	$order_id = rand(1, 999999);
 	$order_amount = $pricedop;
-	$sign = md5($shop_id.':'.$order_amount.':'.$secret.':'.$order_id); 
-	$fakaes =  "RwHasH;2033;_Lucifer_;rimworlda.ru;$paramshash;$sign;FOWPAY;RW;HASH;HACKER;SOSUN";
-	$twostepfakehash = hash('sha256', $fakaes);
+	$currency = 'RUB';
+	$desc = 'Покупка';
+	$array = array ($order_amount,$order_id,$shop_id,$currency,$desc,$secret);
+	$sign = md5(implode( '|',$array));
 	$titledonates = (string)$rdonsres['title'];
 	$categorysdonates = (string)$rdonsres['category'];
 	$nameservers = (string)$rdonsres['server'];
-	$mysqli->query("INSERT INTO `RD-ODERS` (`id`, `name`, `base64`, `sha256`) VALUES (NULL, '$sign', '$paramshash', '$twostepfakehash');");
+	$mysqli->query("INSERT INTO `RD-ODERS` (`id`, `name`, `base64`, `sha256`) VALUES (NULL, '$sign', '$paramshash', 'ХЕХЕХЕ');");
 	$mysqli->query("INSERT INTO `RD-PAYMENT` (`id`, `nick`, `data`, `namedonat`, `category`, `price`, `server`, `give`, `base64`) VALUES (NULL, '$user_id', '$timedays', '$titledonates', '$categorysdonates', $pricedop, '$nameservers', 0, '$paramshash');");
-	$url = "https://fowpay.com/pay?shop=$shop_id&amount=$order_amount&order=$order_id&sign=$sign";
+	$url = "https://payok.io/pay?amount=$order_amount&payment=$order_id&shop=$shop_id&currency=$currency&desc=$desc&sign=$sign";
 	header("Location: ".$url);
 	break;
+	//Касса ENOTIO
 	case '5':
 	$shop_id = ENOTID;
 	$secret = ENOTSECRECTONE;
 	$order_id = $timedays;
 	$order_amount = $pricedop;
 	$sign = md5($shop_id.':'.$order_amount.':'.$secret.':'.$order_id); 
-	$fakaes =  "RwHasH;2033;_Lucifer_;rimworlda.ru;$paramshash;$sign;ENOTIO-GOVNO;RW;HASH;HACKER;SOSUN";
-	$twostepfakehash = hash('sha256', $fakaes);
 	$titledonates = (string)$rdonsres['title'];
 	$categorysdonates = (string)$rdonsres['category'];
 	$nameservers = (string)$rdonsres['server'];
-	$mysqli->query("INSERT INTO `RD-ODERS` (`id`, `name`, `base64`, `sha256`) VALUES (NULL, '$sign', '$paramshash', '$twostepfakehash');");
+	$mysqli->query("INSERT INTO `RD-ODERS` (`id`, `name`, `base64`, `sha256`) VALUES (NULL, '$sign', '$paramshash', 'ХЕХЕХЕ');");
 	$mysqli->query("INSERT INTO `RD-PAYMENT` (`id`, `nick`, `data`, `namedonat`, `category`, `price`, `server`, `give`, `base64`) VALUES (NULL, '$user_id', '$timedays', '$titledonates', '$categorysdonates', $pricedop, '$nameservers', 0, '$paramshash');");
 	$url = "https://enot.io/pay?m=$shop_id&oa=$order_amount&o=$order_id&s=$sign";
 	header("Location: ".$url);
 	break;
+
     default:#на случий если найдется дебил который от ред HTML Код....
 	$_SESSION['success_message'] = false;
 	$_SESSION['success_message_text']='"Ошибка","нет времени объяснять суй ананас в жопу"';

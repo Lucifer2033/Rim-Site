@@ -8,7 +8,7 @@ define('DBPASS', 'Bax');
 define('SITENAME', 'RimWorld | Играй с нами!');
 //ссылка должны быть https://вашдомен/ или http://вашдомен/
 define('URLSITE', 'https://rimworlda.ru/');
-//vk группы токен для оповещения о покупке доната выклю ток через engine/GMain.php удалить строчку 849 
+//vk группы токен для оповещения о покупке доната выклю ток через engine/GMain.php удалить строчку 825
 //если нужно откл или просто закоментить  строчку
 define('VKTOKENS', '7ce83');
 //массив вк айди кому отправить сообщение о покупке доната
@@ -29,9 +29,10 @@ define('FIPS', array('168.119.157.136', '168.119.60.227', '138.201.88.124', '178
 define('QTOKEN','');
 define('QSTOKEN', '');
 define('QSUCCESS', 'https://rimworlda.ru/');
-//Касса FowPay--DEAD мб когда будет работать но фиг его знает
-define('FOWID',1);
-define('FOWSECRET', '2ac');
+//Касса PayOk
+define('PAYOKID',1);
+define('PAYOKSECRET', '2ac');
+define('PAYOKIPS', array('195.64.101.191'));
 //Касса EnotIo
 define('ENOTID',123);
 define('ENOTSECRECTONE', '');

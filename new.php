@@ -213,9 +213,12 @@ echo "$lists";
          let tabs = $('.tab-content')[0].children;
          for (let key = 0; key < tabs.length; key++) {
             const element = tabs[key];
-            if(element.id != idnames&&element.className == 'tab-pane fade in show active'){
+            console.log(`${element.classList}`)
+            if(element.id != `server${idnames}`&&element.className == 'tab-pane fade in show active'){
             element.classList.remove("active");
-            $(`#${idnames}`).addClass('active');
+            $(`#server${idnames}`).addClass('active');
+            }else{
+            $(`#server${idnames}`).addClass('active');
             }
          }
          }
